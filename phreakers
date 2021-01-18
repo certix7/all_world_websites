@@ -1,0 +1,722 @@
+#!/usr/bin/python3
+bg =''#line:3
+W =bg +'\033[0m'#line:4
+R =bg +'\033[31m'#line:5
+B =bg +'\033[32m'#line:6
+O =bg +'\033[33m'#line:7
+G =bg +'\033[34m'#line:8
+P =bg +'\033[35m'#line:9
+C =bg +'\033[36m'#line:10
+GR =bg +'\033[37m'#line:11
+WR ='\033[1;30m'#line:12
+Y ="\033[33m"#line:13
+try :#line:15
+    from threading import Thread #line:16
+    import sqlite3 ,os #line:17
+    import urllib .parse #line:18
+    import os ,time ,sys #line:19
+    from datetime import datetime #line:20
+    import requests #line:21
+    from requests .auth import HTTPDigestAuth #line:22
+    import requests ,urllib .parse ,time ,sys #line:23
+    from datetime import datetime #line:24
+    now =datetime .now ()#line:25
+except ImportError as e :#line:29
+    print (R +'[!] Module %s not found install it ... '%str (e ).split ()[-4 ])#line:30
+    os .system ("pip install colorama")#line:31
+    exit ()#line:32
+def slowprint (OO000OOO00OO0O00O ):#line:39
+  for OO00OO0000O00OO0O in OO000OOO00OO0O00O +'\n':#line:40
+    sys .stdout .write (OO00OO0000O00OO0O )#line:41
+    sys .stdout .flush ()#line:42
+    time .sleep (0.01 )#line:43
+def slowprints (OO00OOO00OO00O000 ):#line:47
+  for O0O00O0000O000OOO in OO00OOO00OO00O000 +'\n':#line:48
+    sys .stdout .write (O0O00O0000O000OOO )#line:49
+    sys .stdout .flush ()#line:50
+    time .sleep (0.001 )#line:51
+import requests ,time ,re ,hashlib ,argparse #line:55
+parser =argparse .ArgumentParser (description ="geo and naser world ")#line:58
+parser .add_argument ("-n","--number",help ="put number ",type =str )#line:59
+parser .add_argument ("-p","--pas",help ="put password ",type =str )#line:60
+args =parser .parse_args ()#line:62
+number =args .number #line:63
+password =args .pas #line:64
+lo ='''                             
+                          #########
+                      #################            #
+                   ######################         #
+                  #########################      #
+               ##############################
+              ##############################
+                              #    ########   #
+                 ##        ###        ####   ##
+                                      ###   ###
+                                    ####   ###
+               ####          ##########   ####
+                 ####################   ####
+                  ##################  ####
+                    ############      ##
+                       ########        ###
+                      #########        #####
+                    ############      ######
+                   ########      #########
+                     #####       ########
+                       ###       #########
+                      ######    ############
+'''#line:91
+logo ='''                             
+ > naser v.3
+                          ########                  #
+                      #################            #
+                   ######################         #
+                  #########################      #
+                ############################
+               ##############################
+               ###############################
+              ###############################
+              ##############################
+                              #    ########   #
+                 ##        ###        ####   ##
+                                      ###   ###
+                                    ####   ###
+               ####          ##########   ####
+               #######################   ####
+                 ####################   ####
+                  ##################  ####
+                    ############      ##
+                       ########        ###
+                      #########        #####
+                    ############      ######
+                   ########      #########
+                     #####       ########
+                       ###       #########
+                      ######    ############
+                     #######################
+                     #   #   ###  #   #   ##
+                     ########################
+                      ##     ##   ##     ##
+                     
+
+
+'''#line:128
+da ='''
+
+
+
+           
+                                                              .  .  .  .
+                                                              .  |  |  .
+                                                           .  |        |  .
+                                                           .              .
+                                                         . |  (\.|\/|./)  | .   
+                                                         .   (\ |||||| /)   .  
+                                                         |  (\  |/  \|  /)  | 
+                                                           (\             )    
+                                                           (\ \e           /
+                                                            \      \/      /    
+                                                            \____/\/\____/     
+                                                                |0\/0|
+                                                                 \/\/
+                                                                  \/ 
+
+
+
+
+
+
+
+
+
+
+'''#line:159
+class database :#line:167
+    def __init__ (O0OO0O00O000OOOOO ,**OO00O000O0OO0O00O ):#line:168
+        O0OO0O00O000OOOOO .filename =OO00O000O0OO0O00O .get ('filename')#line:169
+        O0OO0O00O000OOOOO .table =OO00O000O0OO0O00O .get ('table','test')#line:170
+    def sql_do (OO00OO0OO0OO0OOO0 ,O0O000O00OO000OO0 ,*OOO0O0O000000O0OO ):#line:172
+        OO00OO0OO0OO0OOO0 ._db .execute (O0O000O00OO000OO0 ,OOO0O0O000000O0OO )#line:173
+        OO00OO0OO0OO0OOO0 ._db .commit ()#line:174
+    def insert (OO00OOO0O0O000O0O ,OOO0OO0OOOOO0O000 ):#line:176
+        OO00OOO0O0O000O0O ._db .execute ('insert into {} (number, password,created_at) values (?, ?,datetime("now"))'.format (OO00OOO0O0O000O0O ._table ),(OOO0OO0OOOOO0O000 ['number'],OOO0OO0OOOOO0O000 ['password']))#line:177
+        OO00OOO0O0O000O0O ._db .commit ()#line:178
+    def retrieve (OO0O0000O0OO00OO0 ,OOO00000OO0O0O00O ):#line:180
+        O00O000OOOOO0OOOO =OO0O0000O0OO00OO0 ._db .execute ('select * from {} where number = ?'.format (OO0O0000O0OO00OO0 ._table ),(OOO00000OO0O0O00O ,))#line:181
+        return dict (O00O000OOOOO0OOOO .fetchone ())#line:182
+    def last (O0OOOO0OOOOO0OOO0 ):#line:184
+        OOOO0O00O0OOO0000 =O0OOOO0OOOOO0OOO0 ._db .execute ('select number from {} order by created_at desc limit 1'.format (O0OOOO0OOOOO0OOO0 ._table ),)#line:185
+        return dict (OOOO0O00O0OOO0000 .fetchone ())#line:186
+    def update (OOO00O00O0O0OOO0O ,OOO0O000O0O0OO000 ):#line:190
+        OOO00O00O0O0OOO0O ._db .execute ('update {} set password = ? where number = ?'.format (OOO00O00O0O0OOO0O ._table ),(OOO0O000O0O0OO000 ['password'],OOO0O000O0O0OO000 ['number']))#line:192
+        OOO00O00O0O0OOO0O ._db .commit ()#line:193
+    def delete (OO000000O0O0OO0O0 ,O00OOOOOOO0O00000 ):#line:195
+        OO000000O0O0OO0O0 ._db .execute ('delete from {} where number = ?'.format (OO000000O0O0OO0O0 ._table ),(O00OOOOOOO0O00000 ,))#line:196
+        OO000000O0O0OO0O0 ._db .commit ()#line:197
+    def disp_rows (OO000OOOOO00OO0OO ):#line:199
+        OOOO0OOOOOOOOOOO0 =OO000OOOOO00OO0OO ._db .execute ('select * from {} order by number'.format (OO000OOOOO00OO0OO ._table ))#line:200
+        for OO0O0OO000O00OO0O in OOOO0OOOOOOOOOOO0 :#line:201
+            print ('  {}: {}'.format (OO0O0OO000O00OO0O ['number'],OO0O0OO000O00OO0O ['password']))#line:202
+    def __iter__ (OOOOOOOO00O000OOO ):#line:204
+        O0O0OOO0OO0000OOO =OOOOOOOO00O000OOO ._db .execute ('select * from {} order by number'.format (OOOOOOOO00O000OOO ._table ))#line:205
+        for O000000O00O000O0O in O0O0OOO0OO0000OOO :#line:206
+            yield dict (O000000O00O000O0O )#line:207
+    @property #line:209
+    def filename (OOOO00O000OO00OOO ):return OOOO00O000OO00OOO ._filename #line:210
+    @filename .setter #line:212
+    def filename (O0O0OO000OO000OOO ,OO0O0OOO0OOO0O0OO ):#line:213
+        O0O0OO000OO000OOO ._filename =OO0O0OOO0OOO0O0OO #line:214
+        O0O0OO000OO000OOO ._db =sqlite3 .connect (OO0O0OOO0OOO0O0OO )#line:215
+        O0O0OO000OO000OOO ._db .row_factory =sqlite3 .Row #line:216
+    @filename .deleter #line:218
+    def filename (O000O00OOOO0OO0O0 ):O000O00OOOO0OO0O0 .close ()#line:219
+    @property #line:221
+    def table (OO000OO0000O0OOO0 ):return OO000OO0000O0OOO0 ._table #line:222
+    @table .setter #line:223
+    def table (O000OO0O0OO00O00O ,OOOOOO00OO0OO0O0O ):O000OO0O0OO00O00O ._table =OOOOOO00OO0OO0O0O #line:224
+    @table .deleter #line:225
+    def table (O0000OOOOOOO00O00 ):O0000OOOOOOO00O00 ._table ='test'#line:226
+    def close (OO000O00OO00O0000 ):#line:228
+            OO000O00OO00O0000 ._db .close ()#line:229
+            del OO000O00OO00O0000 ._filename #line:230
+time .sleep (1 )#line:232
+def creat_database ():#line:235
+  print ('we creat our  claw database')#line:237
+  O0O000OO00O0OOOOO =sqlite3 .connect ('claw.db')#line:239
+  O0O000OO00O0OOOOO .row_factory =sqlite3 .Row #line:240
+  O0O000OO00O0OOOOO .execute ('drop table if exists users')#line:242
+  O00OO00000OO00OO0 =''' CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT,number VARCHAR(100) NOT NULL,password VARCHAR(100) NOT NULL,created_at text )'''#line:243
+  O0O00O000OO000OO0 =''' CREATE TABLE data(token VARCHAR(100) NOT NULL,sig VARCHAR(100) NOT NULL,created_at text )'''#line:246
+  O0O000OO00O0OOOOO .execute (O00OO00000OO00OO0 )#line:248
+  O0O000OO00O0OOOOO .execute (O0O00O000OO000OO0 )#line:249
+def users ():#line:250
+  O00OO0OOOOO0OOO0O =database (filename ='claw.db',table ='users')#line:251
+  print ('Create table users')#line:252
+  print (B +"Enter"+C +" [1] "+O +"New number & Password")#line:254
+  print (B +"Enter"+C +" [2] "+O +"see last number & Password")#line:255
+  print (B +"Enter"+C +" [3] "+O +"Update My  Password")#line:256
+  print (B +"Enter"+C +" [4] "+O +"Delet last number & Password")#line:257
+  print (B +"Enter"+C +" [5] "+O +"See last 10 numbers & Passwords ")#line:258
+  while True :#line:260
+    print (WR +"_"*55 +"\n")#line:261
+    OOO0O0O0O000OO0OO =input (B +'Enter Your Choise'+G +': ')#line:262
+    print (WR +"_"*55 +"\n")#line:263
+    if OOO0O0O0O000OO0OO =="1":#line:265
+      O000O0OO000000OO0 =input (GR +'[Enter]  Your number pls'+O +': ')#line:267
+      OOOO000O0OO000O00 =input (GR +'[Enter]  Your password pls'+O +': ')#line:268
+      O00OO0OOOOO0OOO0O .insert (dict (number =O000O0OO000000OO0 ,password =OOOO000O0OO000O00 ))#line:270
+      print (G +'This is  Your Data '+R )#line:272
+      print (O00OO0OOOOO0OOO0O .retrieve (O000O0OO000000OO0 ))#line:273
+    elif OOO0O0O0O000OO0OO =="2":#line:275
+      print (GR +"Last Number")#line:276
+      O00OO0OOOOO0OOO0O =sqlite3 .connect ('claw.db')#line:278
+      O00OO0OOOOO0OOO0O .row_factory =sqlite3 .Row #line:279
+      OOO0O00O0O000OO00 =O00OO0OOOOO0OOO0O .execute ('select * from users order by created_at desc limit 1')#line:280
+      for O00OOO00O0000OOOO in OOO0O00O0O000OO00 :#line:281
+        O00OOO00O0000OOOO =dict (O00OOO00O0000OOOO )#line:282
+        print (C +O00OOO00O0000OOOO ['number']," ---> "+O00OOO00O0000OOOO ['password'])#line:284
+    elif OOO0O0O0O000OO0OO =="3":#line:286
+      O000O0OO000000OO0 =input (GR +'[Enter]  Your number pls'+O +': ')#line:290
+      OOOO000O0OO000O00 =input (GR +'[Enter]  Your '+R +'NEW'+GR +' password pls'+O +': ')#line:291
+      try :#line:293
+        print ('Update data')#line:295
+        O00OO0OOOOO0OOO0O .update (dict (number =O000O0OO000000OO0 ,password =OOOO000O0OO000O00 ))#line:296
+        print (O00OO0OOOOO0OOO0O .retrieve (O000O0OO000000OO0 ))#line:297
+      except Exception as O00O000OO000OO0OO :#line:298
+        print (WR +"-------------------------")#line:299
+        slowprints (R +"opps try again")#line:300
+    elif OOO0O0O0O000OO0OO =="4":#line:305
+      O000O0OO000000OO0 =input (R +'[Enter] Number'+O +'  To Delet  '+R +'pls'+GR +': ')#line:307
+      print (' YOU Delete number :  '+P +'{0}'.format (O000O0OO000000OO0 ))#line:309
+      try :#line:310
+        O00OO0OOOOO0OOO0O .delete (O000O0OO000000OO0 )#line:311
+        print ()#line:312
+        for O00OOO00O0000OOOO in O00OO0OOOOO0OOO0O :print (O00OOO00O0000OOOO )#line:313
+      except Exception as O00O000OO000OO0OO :#line:314
+        print (WR +"-------------------------")#line:315
+        slowprints (R +"opps try again")#line:316
+    elif OOO0O0O0O000OO0OO =="5":#line:319
+      for O00OOO00O0000OOOO in O00OO0OOOOO0OOO0O :#line:322
+        print (WR +"------------------------")#line:323
+        print (R +O00OOO00O0000OOOO ['number']+"  ||  "+O00OOO00O0000OOOO ["password"])#line:324
+    elif OOO0O0O0O000OO0OO =="*":#line:328
+      exit ()#line:330
+def check (OOO0O00OOO0OOO0OO ):#line:331
+  try :#line:332
+    OOO00O00000O0OO0O ={'user-agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET CLR 3.5.30729)'}#line:334
+    OO0OO00O0O000OOOO =requests .get ('http://'+OOO0O00OOO0OOO0OO ,headers =OOO00O00000O0OO0O ,allow_redirects =False ,)#line:337
+    O00OO0O000OOO0OO0 =OO0OO00O0O000OOOO .status_code #line:338
+    return O00OO0O000OOO0OO0 #line:339
+  except requests .exceptions .ConnectionError as O0OOOOO0O00OO000O :#line:340
+    pass #line:341
+def save (O00000OOOO00O00OO ):#line:343
+  O0O000O0OO0OOOO0O =open ("hosts_scan.txt","a")#line:345
+  O0OOOO0O00OOOO00O =O0O000O0OO0OOOO0O .write (O00000OOOO00O00OO )#line:346
+  O0O000O0OO0OOOO0O .close ()#line:347
+def hosts ():#line:348
+    OOO0OO0OOOO0O0OO0 =input (str (R +"Pls Write Your file name ( example.txt ) : "))#line:350
+    print (C +"-----------------------------------")#line:352
+    O0O0OOO00OO0OOOOO =open (OOO0OO0OOOO0O0OO0 ,"r")#line:354
+    OOOOO00OOO0OOO0OO =O0O0OOO00OO0OOOOO .readlines ()#line:355
+    OO0OO0O0OO0O0O0O0 =1 #line:356
+    for O000OO00O0O000O00 in OOOOO00OOO0OOO0OO :#line:357
+        try :#line:358
+          O000OO00O0O000O00 =O000OO00O0O000O00 .strip ()#line:359
+          OOO000OO000O0000O =check (O000OO00O0O000O00 )#line:360
+          OO00O0OO000O000OO =O000OO00O0O000O00 +":"+str (OOO000OO000O0000O )+"\r\n"#line:361
+          print (Y +O000OO00O0O000O00 +" ---> "+B +str (OOO000OO000O0000O ))#line:362
+          OO0OO0O0OO0O0O0O0 +=1 #line:363
+          print (WR +str (OO0OO0O0OO0O0O0O0 )+"--------------")#line:364
+          save (OO00O0OO000O000OO )#line:365
+        except Exception as O0O0OOO00OO0OOOOO :#line:368
+            print (O0O0OOO00OO0OOOOO )#line:369
+def run ():#line:370
+    print (" ---------------- welcome--------------")#line:372
+    print (C +"--------------certstars  Host Scan script v.2.1 ---------------"+P )#line:373
+    print (os .listdir ())#line:375
+    print ("********************************************")#line:376
+    O0O0OOO0OOOO0000O =Thread (target =hosts ,args =())#line:378
+    O0O0OOO0OOOO0000O .start ()#line:380
+def start ():#line:381
+  O0O00OO0000OO00O0 =os .listdir ()#line:382
+  if "claw.db"in O0O00OO0000OO00O0 :#line:384
+      pass #line:385
+  else :#line:387
+    creat_database ()#line:388
+clear =lambda :os .system ('clear')#line:390
+print ("-----------------------------------------------")#line:391
+clear ()#line:392
+print (G +"_"*58 +"\n")#line:393
+slowprint (P +"""Creating And Run Script By:  \t\t Ahmed Naser
+CopyRight ©    \t\t\t Egypt Gold Generation  E.G.G """)#line:395
+print (G +"_"*58 +"\n")#line:396
+slowprint (R +" normal members Key"+B +" will updated "+R +"every 3 days"+B +" in our telegram chanel   ")#line:397
+print (O +"\t\t\t te.me/certstars"+"\n")#line:398
+print (C +"---------------------------------------")#line:399
+print ("normal members section")#line:400
+print (C +"---------------------------------------")#line:401
+print (B +"Enter"+GR +" [0] "+Y +"Store My Numbers")#line:406
+print (B +"Enter"+G +" [1] "+B +"To Scan Live Hosts")#line:407
+print (B +"Enter"+G +" [2] "+B +"To Search For New Bugs ")#line:408
+print (B +"Enter"+G +" [3] "+B +"Proxy World")#line:409
+print (B +"Enter"+G +" [4] "+B +"[Free calls,Sms,Giga_bytes Lottery] "+R +"Soon")#line:410
+print (R +"---------------------------------------")#line:412
+print (W +"pro members section need secret key ")#line:413
+print (R +"---------------------------------------")#line:414
+print (B +"\nEnter"+G +" [5] "+C +"[MR ANDROID scaner] "+R +"new")#line:415
+print (B +"Enter"+G +" [6] "+C +"ACTIVATE 40 GIGA bytes")#line:416
+print (B +"Enter"+G +" [7] "+C +"ACTIVATE Orange bundels")#line:417
+print (B +"Enter"+G +" [8] "+C +"ACTIVATE Etisalat Offers ")#line:418
+print (B +"Enter"+G +" [8] "+C +"UNLIMTED Free  ")#line:419
+print (B +"---------------------------------------")#line:420
+option =input (GR +"ENTER YOUR Choise :")#line:423
+bravo =input (W +"Pro Members Secret Key  IF Not Press"+C +" [enter]  :")#line:424
+time .sleep (1 )#line:426
+clear ()#line:427
+start ()#line:428
+def hackertarget ():#line:429
+    print (C +"\r\n[*] ---------------- [*]",end ="")#line:431
+    print (G +"\r\n[*] Search For sub domains [*]")#line:432
+    OOOO0O0OOOO0O0000 =input (Y +"pls put you host :")#line:434
+    OO0O00000000O0000 ="http://api.hackertarget.com/hostsearch/?q="+OOOO0O0OOOO0O0000 #line:435
+    O00OO0OO000000O0O ="http://api.hackertarget.com/reverseiplookup/?q="+OOOO0O0OOOO0O0000 #line:436
+    OO00OOO0000O0000O =requests .get (OO0O00000000O0000 )#line:437
+    O00OO00OOOOOO00O0 =requests .get (O00OO0OO000000O0O )#line:438
+    OO00OOO0000O0000O =OO00OOO0000O0000O .text #line:439
+    O00OO00OOOOOO00O0 =O00OO00OOOOOO00O0 .text #line:440
+    O0OOO00OOOOO0OOO0 =O00OO00OOOOOO00O0 +OO00OOO0000O0000O #line:441
+    print (O +O00OO00OOOOOO00O0 +OO00OOO0000O0000O )#line:442
+    with open ("my_sub_domains.txt","w")as OOOO00O000OOOO00O :#line:443
+      OOOO00O000OOOO00O .write (O0OOO00OOOOO0OOO0 )#line:444
+def direct ():#line:446
+  OOO00O0000O0000OO ='''\033[1;32m
+
+        _ _               _                         
+       | (_)             | |                        
+     __| |_ _ __ ___  ___| |_   ___  ___ __ _ _ __  
+    / _` | | '__/ _ \/ __| __| / __|/ __/ _` | '_ \ 
+   | (_| | | | |  __/ (__| |_  \__ \ (_| (_| | | | |
+    \__,_|_|_|  \___|\___|\__| |___/\___\__,_|_| |_|
+                                                    
+   created by A_NASER                                     
+  \033[0m'''#line:458
+  print (OOO00O0000O0000OO )#line:459
+  from threading import Thread #line:460
+  import concurrent .futures #line:461
+  try :#line:463
+      from os import sys ,system #line:464
+      import socket ,os #line:465
+      from time import sleep #line:466
+      from threading import Thread #line:467
+      import time #line:468
+  except ImportError as O0O0OOOOO0OO00O0O :#line:470
+      print ('[!] Module %s ---....'%str (O0O0OOOOO0OO00O0O ).split (' ')[-1 ])#line:471
+      exit (1 )#line:472
+  O000000OO000OOO00 ="\033[1;30m"#line:474
+  O0000O0000O0OOOO0 ='\033[0m'#line:476
+  O000000O00O0O000O ='\033[31m'#line:477
+  OOOO0OO000000OOOO ='\033[1;32m'#line:478
+  O000O0O0OOOO0O0OO ='\033[33m'#line:479
+  OOO0000OOO00O0OO0 ='\033[34m'#line:480
+  OOO00OOO00000OOOO ='\033[35m'#line:481
+  OO00O0O0000000OO0 ='\033[36m'#line:482
+  OO0000OO0OOO0OO0O ='\033[37m'#line:483
+  def OO0OO0000OO0O000O (O00OOOO0OOO0OOO00 ):#line:487
+    O0O0OO00OO0OO000O =80 #line:488
+    O00OO0O00000OOOO0 =socket .socket (socket .AF_INET ,socket .SOCK_STREAM )#line:489
+    O00OO0O00000OOOO0 .settimeout (int (1 ))#line:490
+    O00OO0O00000OOOO0 .connect ((O00OOOO0OOO0OOO00 ,O0O0OO00OO0OO000O ))#line:491
+    O0O00OO0OOO000000 ="OPTIONS / HTTP/1.0\r\nConnection: keep-alive\r\nHost:{0}\r\n\r\n".format (O00OOOO0OOO0OOO00 )#line:493
+    try :#line:495
+      O00OO0O00000OOOO0 .sendall (O0O00OO0OOO000000 .encode ("UTF-8"))#line:496
+      OO00OOOO000O0O00O =O00OO0O00000OOOO0 .recv (1024 ).decode ("UTF-8").split ("\r\n")[0 ]#line:497
+      return OO00OOOO000O0O00O #line:498
+    except socket .timeout :#line:499
+      print (O000000O00O0O000O +"[!] TIME OUT [!]"+O0000O0000O0OOOO0 )#line:500
+    except socket .error :#line:501
+      print (O000000O00O0O000O +"[!] socket.error [!]"+O0000O0000O0OOOO0 )#line:502
+    except IOError :#line:503
+      print (O000000O00O0O000O +"[!]{}[!]\n[!]IOError[!]".format (file )+O0000O0000O0OOOO0 )#line:504
+    except Exception as OOO00O00OOOO00000 :#line:505
+      O00OO0O00000OOOO0 .close ()#line:506
+      pass #line:507
+  print (os .listdir (os .getcwd ()))#line:510
+  O0O00O0O000O0O0O0 =input ("\033[31mput your files :")or "top_sites.txt"#line:511
+  def O0OOOO0O0O00000O0 ():#line:512
+    OO0OO00O00O00O0OO =0 #line:513
+    with open (O0O00O0O000O0O0O0 ,"r")as OO0O0OOOO0O00O0OO :#line:515
+      for O0000OO00000O00O0 in OO0O0OOOO0O00O0OO :#line:516
+        O00000OOO0OOO0OO0 =O0000OO00000O00O0 .strip ()#line:517
+        OO0OO00O00O00O0OO +=1 #line:518
+        print (O000000OO000OOO00 +"%s-----------------"%(OO0OO00O00O00O0OO ))#line:519
+        try :#line:521
+          OOOO000O0OOO000OO =OO0OO0000OO0O000O (O00000OOO0OOO0OO0 )#line:522
+          if OOOO000O0OOO000OO :#line:524
+            OOOO000O0OOO000OO =str (OOOO000O0OOO000OO )#line:525
+            if "302"in OOOO000O0OOO000OO :#line:526
+              print (O0000O0000O0OOOO0 +"[+] DEAD URL ----> "+OOO00OOO00000OOOO +O00000OOO0OOO0OO0 )#line:527
+              print (O000000O00O0O000O +"-------------")#line:528
+              with open (" DIRECT_Dead_Bugs","a")as OO0O0OO00O0OO0OO0 :#line:529
+                OO0O0OO00O0OO0OO0 .write (O00000OOO0OOO0OO0 +"\r\n")#line:530
+            else :#line:532
+              print (OO00O0O0000000OO0 +"[+]\033[37m Discovered URL ----> "+O000O0O0OOOO0O0OO +O00000OOO0OOO0OO0 +"  "+OOOO0OO000000OOOO +OOOO000O0OOO000OO )#line:535
+              with open ("DIRECT_Active_Bugs","a")as OO0O0OO00O0OO0OO0 :#line:536
+                OO0O0OO00O0OO0OO0 .write (O00000OOO0OOO0OO0 +"\r\n")#line:537
+        except Exception as O00O00OOOO0O0O00O :#line:538
+          print (O00O00OOOO0O0O00O )#line:539
+          time .sleep (1 )#line:540
+          pass #line:541
+  O0OOOO0O0O00000O0 ()#line:548
+def delta ():#line:550
+  try :#line:556
+      from os import sys ,system #line:557
+      import socket ,os #line:558
+      from re import findall #line:559
+      from time import sleep #line:560
+      from threading import Thread #line:561
+      import requests #line:562
+      import concurrent .futures #line:563
+      import time #line:564
+  except ImportError as O000OO00O0OO0O000 :#line:566
+      print ('[!] Module %s ---....'%str (O000OO00O0OO0O000 ).split (' ')[-1 ])#line:567
+      exit (1 )#line:568
+  class O00OO0O0O00O0OOO0 (object ):#line:572
+      ""#line:573
+      def __init__ (O0000OOOO00OOO0O0 ):#line:574
+          pass #line:575
+      def scraper (OOOO0OOO0O000OOOO ):#line:576
+          OOOOO0OOO00OO000O =requests .get ("https://api.proxyscrape.com/?request=displayproxies&proxytype=http&timeout=7000&country=all&anonymity=elite&ssl=all")#line:577
+          O000000OO0O0O00O0 =requests .get ("https://api.proxyscrape.com/?request=displayproxies&proxytype=socks4&timeout=7000")#line:578
+          O0O00OO00O00O0000 =requests .get ("http://rootjazz.com/proxies/proxies.txt")#line:579
+          OO0O0000000OOO0OO =OOOOO0OOO00OO000O .text +O000000OO0O0O00O0 .text +O0O00OO00O00O0000 .text #line:580
+          with open ("myproxys.txt","w")as O000O0O0OO0O0OO0O :#line:583
+              O000O0O0OO0O0OO0O .write (OO0O0000000OOO0OO )#line:584
+      def cret_proxy_list (O0000OO00O0OOO0OO ,OO000O0OOO00O0OOO ):#line:586
+          O00O00OOO0OOOOO00 =255 #line:587
+          OO000000000000000 =""#line:588
+          for O00O00O0O00OO0OOO in range (255 ):#line:589
+              OO000O00OOO000OO0 =str (OO000O0OOO00O0OOO )+"." "{0}".format (O00O00O0O00OO0OOO )#line:590
+              for O00O00OOO0O0O0O0O in range (255 ):#line:591
+                  O00O00OOO0OO0OO00 =OO000O00OOO000OO0 +"."+str (O00O00OOO0O0O0O0O )+":"+"8080\r\n"#line:592
+                  OO000000000000000 =OO000000000000000 +O00O00OOO0OO0OO00 #line:593
+          with open ("myproxys.txt","w")as O00O000OO000O0OO0 :#line:595
+              O00O000OO000O0OO0 .write (OO000000000000000 )#line:596
+          print (OO000000000000000 )#line:598
+      def read_proxys_from_file (OOOO000OOOO000O0O ,OO0OO00OOO0O0OOOO ):#line:599
+          O0O00O0O00O0O00O0 =[]#line:600
+          with open (OO0OO00OOO0O0OOOO )as O00OOOO000O0OOO0O :#line:601
+              for OO00OOOO0O000OO0O in O00OOOO000O0OOO0O .readlines ():#line:602
+                  O0O00O0O00O0O00O0 .append (OO00OOOO0O000OO0O .split ("\n")[0 ])#line:603
+          for O000OO00O000O0OO0 in O0O00O0O00O0O00O0 :#line:604
+              O000OO00O000O0OO0 ,OO0O0O00O0OOOOO00 =O000OO00O000O0OO0 .split (":")#line:605
+              print (O000OO00O000O0OO0 ,OO0O0O00O0OOOOO00 )#line:606
+  O00000OOOOO0OO0O0 =O00OO0O0O00O0OOO0 ()#line:608
+  O0O00000O0OO0OO00 ='\033[0m'#line:612
+  OO0OOO000OOOOO0O0 ='\033[31m'#line:613
+  O0O00O00O00OOOOOO ='\033[1;32m'#line:614
+  O000000OOOOO00O0O ='\033[33m'#line:615
+  O00000OOO0OOOO00O ='\033[34m'#line:616
+  OO0OOOOOOOO00O000 ='\033[35m'#line:617
+  O0OO000000O00O00O ='\033[36m'#line:618
+  O0O00O000OOOO0000 ='\033[37m'#line:619
+  OO0OO000OOOOOO00O ="result.txt"#line:621
+  class O0OOO000O0O00000O (Thread ):#line:622
+      ""#line:623
+      def __init__ (OO0O0O0O0OOOO0O00 ):#line:624
+          super (O0OOO000O0O00000O ,OO0O0O0O0OOOO0O00 ).__init__ ()#line:625
+          pass #line:626
+      def slowprint (O0O0O00O000OOOO0O ,O0O000OO0OOOOO0OO ):#line:627
+          system ("clear")#line:628
+          print (OO0OOOOOOOO00O000 +"Proxy Checker & Grab Proxy sslproxies.org"+O0O00000O0OO0OO00 )#line:629
+          for O00O00O0OO0OOOOO0 in O0O000OO0OOOOO0OO +'\n':#line:630
+              sys .stdout .write (O00O00O0OO0OOOOO0 )#line:631
+              sys .stdout .flush ()#line:632
+              sleep (2. /90 )#line:633
+      def test_proxys_file (O0OOOOO0O0000000O ,O0O0O0OOOOOOO00OO ):#line:634
+          O0OO0OO0O0O00O000 =[]#line:635
+          with open (O0O0O0OOOOOOO00OO )as O0O0OO00O0O00OO0O :#line:636
+              for OO0OOO00O00OO0O0O in O0O0OO00O0O00OO0O .readlines ():#line:637
+                  O0OO0OO0O0O00O000 .append (OO0OOO00O00OO0O0O .split ("\n")[0 ])#line:639
+          for O0O0000OO0OOOOOOO in O0OO0OO0O0O00O000 :#line:641
+              O0O0000OO0OOOOOOO ,O0O000O00OO00OO00 =O0O0000OO0OOOOOOO .split (":")#line:642
+              try :#line:643
+                   O0OOOOO0O0000000O .proxy_check (O0O0000OO0OOOOOOO ,int (O0O000O00OO00OO00 ))#line:645
+              except Exception as O0O0OO00O0O00OO0O :#line:646
+                  continue #line:647
+      def listdir (OO00O00OOOOOOOOO0 ):#line:648
+          OO00O00OOOOOOOOO0 .shit ()#line:649
+          print (os .listdir ())#line:650
+      def proxy_check (OOOOOOOO0OOOOO0OO ,O0OO0O0OOO0OO0O00 ,O0OO0000O000O00OO ):#line:651
+          OO0O0O0000O00OOO0 =socket .socket (socket .AF_INET ,socket .SOCK_STREAM )#line:653
+          OO0O0O0000O00OOO0 .settimeout (int (OOOOOOO0000O00OOO ))#line:654
+          print ("\r\n[*] --- check Proxy --- [*]")#line:655
+          try :#line:656
+              print ("Connect to Proxy: "+O000000OOOOO00O0O +O0OO0O0OOO0OO0O00 +":"+str ((O0OO0000O000O00OO ))+O0O00000O0OO0OO00 )#line:657
+              OO0O0O0000O00OOO0 .connect ((O0OO0O0OOO0OO0O00 ,O0OO0000O000O00OO ))#line:658
+              print ("Get to Host: ",O00O0O0OO00000O0O )#line:659
+              OO0O00O000OO000O0 ="CONNECT %s HTTP/1.0\r\nConnection: keep-alive\r\n\r\n"%(O00O0O0OO00000O0O )#line:660
+              OO0O0O0000O00OOO0 .sendall (OO0O00O000OO000O0 .encode ("UTF-8"))#line:662
+              O00OO000OO0OOO000 =OO0O0O0000O00OOO0 .recv (9000 )#line:663
+              O0O0O0OO00O000000 =O00OO000OO0OOO000 .decode ("UTF-8").split ("\r\n")[0 ]#line:664
+              if O0O0O0OO00O000000 in ['HTTP/1.0 200 OK','HTTP/1.1 200 OK','HTTP/1.1 200 Connection established','HTTP/1.0 200 Connection established']:#line:665
+                  print ("Status Code: ",O0O00O00O00OOOOOO +O0O0O0OO00O000000 +O0O00000O0OO0OO00 )#line:666
+                  print ("save proxy in : ",OO0OO000OOOOOO00O )#line:667
+                  OOOOO0O0OO0O00000 =open (OO0OO000OOOOOO00O ,"a+")#line:668
+                  OOOOO0O0OO0O00000 .write ("%s:%s\n"%(O0OO0O0OOO0OO0O00 ,str (O0OO0000O000O00OO )))#line:669
+                  OOOOO0O0OO0O00000 .close ()#line:670
+              else :#line:671
+                  print (O0OO000000O00O00O +O0O0O0OO00O000000 +O0O00000O0OO0OO00 )#line:672
+          except socket .timeout :#line:673
+              print (OO0OOO000OOOOO0O0 +"[!] TIME OUT [!]"+O0O00000O0OO0OO00 )#line:674
+          except socket .error :#line:675
+              print (OO0OOO000OOOOO0O0 +"[!] socket.error [!]"+O0O00000O0OO0OO00 )#line:676
+          except IOError :#line:677
+              print (OO0OOO000OOOOO0O0 +"[!]{}[!]\n[!]IOError[!]".format (OO0OO000OOOOOO00O )+O0O00000O0OO0OO00 )#line:678
+          OO0O0O0000O00OOO0 .close ()#line:679
+      def run (O0O00O00O00OO0O0O ):#line:680
+          print (os .listdir ())#line:681
+          OOO0OO00OO0O0OOO0 =input ("put proxy file : ")#line:682
+          OO000O000OOO000O0 =O0O00O00O00OO0O0O .test_proxys_file (OOO0OO00OO0O0OOO0 )#line:683
+          OO0O00OO00O0OO00O =Thread (target =OO000O000OOO000O0 ,args =())#line:685
+          OO0O00OO00O0OO00O .start ()#line:687
+      def singel_proxy (OOO0O0OO0O0O0O0O0 ):#line:688
+          O000OOO0OO0OO0O00 =input (O0OO000000O00O00O +"Inser Proxy:Port: ")#line:690
+          OO00OO0O0O00O0OO0 =O000OOO0OO0OO0O00 .find (':')#line:691
+          OOO00OOO0000OO00O =(O000OOO0OO0OO0O00 [:OO00OO0O0O00O0OO0 ])#line:692
+          O00O0O00000OO0O00 =(O000OOO0OO0OO0O00 [OO00OO0O0O00O0OO0 +1 :])#line:693
+          OOO0O0OO0O0O0O0O0 .proxy_check (str (OOO00OOO0000OO00O ),int (O00O0O00000OO0O00 ))#line:694
+      def all_methods (O0OO0OO00OOO0000O ,OO00OO00O0OOO00OO ,O00O00O000OOO000O ,O0O00000000O000OO ):#line:696
+          OO000000OOOO00O0O =socket .socket (socket .AF_INET ,socket .SOCK_STREAM )#line:698
+          OO000000OOOO00O0O .settimeout (int (OOOOOOO0000O00OOO ))#line:699
+          print ("\r\n[*] --- check Proxy --- [*]")#line:700
+          try :#line:701
+              print ("Connect to Proxy: "+O000000OOOOO00O0O +OO00OO00O0OOO00OO +":"+str ((O00O00O000OOO000O ))+O0O00000O0OO0OO00 )#line:702
+              OO000000OOOO00O0O .connect ((OO00OO00O0OOO00OO ,O00O00O000OOO000O ))#line:703
+              print ("Get to Host: ",O00O0O0OO00000O0O )#line:704
+              O0O0O0000OOO00000 ="%s %s HTTP/1.0\r\nConnection: keep-alive\r\n\r\n"%(O0O00000000O000OO ,O00O0O0OO00000O0O )#line:705
+              OO000000OOOO00O0O .sendall (O0O0O0000OOO00000 .encode ("UTF-8"))#line:707
+              O0OOO0000OO0O0O00 =OO000000OOOO00O0O .recv (9000 )#line:708
+              OOOO0OOOOO0000000 =O0OOO0000OO0O0O00 .decode ("UTF-8").split ("\r\n")[0 ]#line:709
+              if OOOO0OOOOO0000000 in ['HTTP/1.0 200 OK','HTTP/1.1 200 OK','HTTP/1.1 200 Connection established','HTTP/1.0 200 Connection established']:#line:710
+                  print ("Status Code: ",O0O00O00O00OOOOOO +OOOO0OOOOO0000000 +O0O00000O0OO0OO00 )#line:711
+                  print ("save proxy in : ",OO0OO000OOOOOO00O )#line:712
+                  O0O000O00OOOOO0OO =open (OO0OO000OOOOOO00O ,"a+")#line:713
+                  O0O000O00OOOOO0OO .write ("%s:%s\n"%(OO00OO00O0OOO00OO ,str (O00O00O000OOO000O )))#line:714
+                  O0O000O00OOOOO0OO .close ()#line:715
+              else :#line:716
+                  print (O0OO000000O00O00O +OOOO0OOOOO0000000 +O0O00000O0OO0OO00 )#line:717
+          except socket .timeout :#line:718
+              print (OO0OOO000OOOOO0O0 +"[!] TIME OUT [!]"+O0O00000O0OO0OO00 )#line:719
+          except socket .error :#line:720
+              print (OO0OOO000OOOOO0O0 +"[!] socket.error [!]"+O0O00000O0OO0OO00 )#line:721
+          except IOError :#line:722
+              print (OO0OOO000OOOOO0O0 +"[!]{}[!]\n[!]IOError[!]".format (OO0OO000OOOOOO00O )+O0O00000O0OO0OO00 )#line:723
+          OO000000OOOO00O0O .close ()#line:724
+      def test_proxys_allmethods (O00O000OO000O0O00 ,OO0O0O00OO0000OO0 ):#line:726
+          O000OOOOO0O0OOO0O =[]#line:727
+          OO00O0OO0OOOOO0O0 =["PUT","GET","POST","HEAD","PATCH","TRACE","DELETE","OPTIONS","CONNECT"]#line:728
+          with open (OO0O0O00OO0000OO0 )as OOOOOO0O00OO000OO :#line:730
+              for OO0OO0000O000O0OO in OOOOOO0O00OO000OO .readlines ():#line:731
+                  O000OOOOO0O0OOO0O .append (OO0OO0000O000O0OO .split ("\n")[0 ])#line:733
+          for O000OO0O0O0O00O0O in O000OOOOO0O0OOO0O :#line:735
+              O000OO0O0O0O00O0O ,O0OOO00OOOOO0OOOO =O000OO0O0O0O00O0O .split (":")#line:736
+              try :#line:737
+                  for OO000O00O0000O0OO in OO00O0OO0OOOOO0O0 :#line:738
+                      print (OO000O00O0000O0OO +O0O00O000OOOO0000 +"\n------------")#line:739
+                      O00O000OO000O0O00 .all_methods (O000OO0O0O0O00O0O ,int (O0OOO00OOOOO0OOOO ),OO000O00O0000O0OO )#line:740
+              except Exception as OOOOOO0O00OO000OO :#line:741
+                  continue #line:742
+      def read_shit_proxys (O0O00OOOO0000O00O ,):#line:745
+          O0O00O0000OOOOO0O =input (OO0OOO000OOOOO0O0 +"put your proxy files :")or "result.txt"#line:746
+          OO0OO0OO0OO000O0O =open (O0O00O0000OOOOO0O ,"r")#line:748
+          O0OOO0O00000O0O0O =OO0OO0OO0OO000O0O .readlines ()#line:749
+          OOO0000000O00O0OO =[O00O00OO000O0O0OO .strip ()for O00O00OO000O0O0OO in O0OOO0O00000O0O0O ]#line:750
+          for OOOO0O00O0OO000O0 in OOO0000000O00O0OO :#line:751
+              try :#line:752
+                  O0O00OOOO0000O00O .req_test (OOOO0O00O0OO000O0 )#line:754
+              except Exception as O00OO0O0OO00O000O :#line:755
+                  continue #line:756
+      def req_test (O0000O0O0OOOO0000 ,OO00000000OOOOOO0 ):#line:760
+          O000O00OO0OOOO00O ={'user-agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET CLR 3.5.30729)'}#line:761
+          OO0OO00OOO00OOO0O =requests .get ('http://'+OO00000000OOOOOO0 ,headers =O000O00OO0OOOO00O ,timeout =int (OOOOOOO0000O00OOO ),proxies =({'http':'http://'+str (OO00000000OOOOOO0 )}))#line:762
+          print (O0O00000O0OO0OO00 +'+ Status : '+O0O00O00O00OOOOOO +str (OO00000000OOOOOO0 )+O0O00000O0OO0OO00 +' - '+OO0OOO000OOOOO0O0 +str (OO0OO00OOO00OOO0O .status_code )+O0O00000O0OO0OO00 )#line:763
+  O000000O0O0O00O00 =O0OOO000O0O00000O ()#line:767
+  if __name__ =="__main__":#line:769
+      print (O0OO000000O00O00O +"\r\n[*] ---------------- [*]",end ="")#line:772
+      print (O0O00O00O00OOOOOO +"\r\n[*] Proxy World [*]")#line:773
+      O00O0O0OO00000O0O =input (OO0OOO000OOOOO0O0 +"Insert \033[33mbughost: ")or "m.facebook.com"#line:774
+      OOOOOOO0000O00OOO =input (O0OO000000O00O00O +"set timeout defualt [3]s : ")or "3"#line:775
+      print (O0OO000000O00O00O +"\r\n[*] ---------------- [*]")#line:776
+      O00OOOO0O0O0000O0 =[O0O00O00O00OOOOOO +'1-test proxy file','2-test single proxy','3-get auto proxys file',"4-check proxy with all methods[slow]","5-test with requests not recomanded","6-make your own proxy list"];#line:778
+      for OOOOO00OOO0O00000 in O00OOOO0O0O0000O0 :print (OOOOO00OOO0O00000 )#line:779
+  try :#line:782
+      while 1 :#line:783
+          O00OO0O0OO0000O0O =input (OO0OOOOOOOO00O000 +"put your option pls :")#line:784
+          if O00OO0O0OO0000O0O =="1":#line:786
+              O000000O0O0O00O00 .run ()#line:787
+          elif O00OO0O0OO0000O0O =="2":#line:788
+              O000000O0O0O00O00 .singel_proxy ()#line:789
+          elif O00OO0O0OO0000O0O =="3":#line:790
+              O00000OOOOO0OO0O0 .scraper ()#line:791
+              print (O0OO000000O00O00O +"\r\n[*] done we bring proxy file for you [*]")#line:792
+          elif O00OO0O0OO0000O0O =="4":#line:793
+              print (os .listdir ())#line:794
+              O000000OO0OO0O0OO =input ("put proxy file ")#line:795
+              O0O00OO0OO00000O0 =O000000O0O0O00O00 .test_proxys_allmethods (O000000OO0OO0O0OO )#line:796
+              with concurrent .futures .ThreadPoolExecutor ()as O0000O0OO000O00OO :#line:797
+                  O0000O0OO000O00OO (O0O00OO0OO00000O0 )#line:798
+          elif O00OO0O0OO0000O0O =="5":#line:799
+              print (os .listdir ())#line:800
+              O000000O0O0O00O00 .read_shit_proxys ()#line:802
+              os .system ('clear')#line:803
+              O000000O0O0O00O00 .proxy_request_lib (O00O0O0OO00000O0O )#line:804
+          elif O00OO0O0OO0000O0O =="6":#line:805
+              print (O0OO000000O00O00O +"\r\n[*] ------------ [*]")#line:806
+              OOOO00OOOO0OOOO00 =input ("put half proxy ex -->127.0 : ")#line:808
+              O00000OOOOO0OO0O0 .cret_proxy_list (OOOO00OOOO0OOOO00 )#line:809
+              print (O0OO000000O00O00O +"\r\n[*] done we creat proxys[*]")#line:810
+      print (O0OO000000O00O00O +"\r\n[*] ---------------- [*]")#line:814
+  except KeyboardInterrupt :#line:816
+      print (O0OO000000O00O00O +"\r\nbay bay sir have good day\r\n -----------------\r")#line:817
+      time .sleep (2 )#line:818
+      os .system ('clear')#line:819
+  except Exception as O000OO00O0OO0O000 :#line:821
+      print (O000OO00O0OO0O000 )#line:822
+def android ():#line:826
+  OOOO0O000O0O0OOOO =''#line:828
+  O0OOOO000OOO0O0OO =OOOO0O000O0O0OOOO +'\033[0m'#line:829
+  OO0OO00OOOO0O0OOO =OOOO0O000O0O0OOOO +'\033[31m'#line:830
+  O00OO0OOO0000OOO0 =OOOO0O000O0O0OOOO +'\033[32m'#line:831
+  OO00O0O0O000OOOO0 =OOOO0O000O0O0OOOO +'\033[33m'#line:832
+  O0OOOO000OO0O0O00 =OOOO0O000O0O0OOOO +'\033[34m'#line:833
+  O0O00OO0OOOO00O00 =OOOO0O000O0O0OOOO +'\033[35m'#line:834
+  OOO00OO00000O0O00 =OOOO0O000O0O0OOOO +'\033[36m'#line:835
+  O00O0OO00OO0O0OOO =OOOO0O000O0O0OOOO +'\033[37m'#line:836
+  O00OO00OO0000OOOO ='\033[1;30m'#line:837
+  OOO00OO00OO000OOO ="\033[33m"#line:838
+  O000OO000O00OOO0O =OOO00OO00OO000OOO +"""
+  ___  ___         ___              _              _      _ 
+  |  \/  |        / _ \            | |            (_)    | |
+  | .  . | _ __  / /_\ \ _ __    __| | _ __  ___   _   __| |
+  | |\/| || '__| |  _  || '_ \  / _` || '__|/ _ \ | | / _` |
+  | |  | || |    | | | || | | || (_| || |  | (_) || || (_| |
+  \_|  |_/|_|    \_| |_/|_| |_| \__,_||_|   \___/ |_| \__,_|
+                                                            
+  """#line:848
+  import concurrent .futures #line:852
+  import requests ,os #line:853
+  import threading #line:854
+  import sys #line:855
+  import time #line:856
+  from colorama import Fore ,Style #line:857
+  def OO0000O00O0O00OOO (O00OOO0O00OOOO0O0 ):#line:859
+    for O0000O000O0OOO000 in O00OOO0O00OOOO0O0 +'\n':#line:860
+      sys .stdout .write (O0000O000O0OOO000 )#line:861
+      sys .stdout .flush ()#line:862
+      time .sleep (0.01 )#line:863
+  OO0000O00O0O00OOO (O000OO000O00OOO0O )#line:864
+  print (O00OO0OOO0000OOO0 +"MrAndroid Fast scaner "+OO0OO00OOOO0O0OOO +"\nfast scaner ever")#line:865
+  print (O0OOOO000OO0O0O00 +"--------------------------------------------------")#line:866
+  print ("this is your files --")#line:867
+  print (os .listdir (os .getcwd ()))#line:868
+  print (O00OO00OO0000OOOO +"-------------------------------")#line:869
+  OOOOOO0O00O0OOO0O =input (O0OOOO000OOO0O0OO +"pls put your hosts file :")#line:871
+  OO000O00O0000O00O ="result.txt"#line:872
+  O000O0OO0OO00O000 =open (OO000O00O0000O00O ,"a")#line:873
+  with open (OOOOOO0O00O0OOO0O ,"r")as OOO000OOOO0O0O0O0 :#line:874
+    OO0OO0O0OO0OOO0O0 =[OOOOOO000OO000OO0 .rstrip ()for OOOOOO000OO000OO0 in OOO000OOOO0O0O0O0 ]#line:875
+  O0OOOO0OO0O0000OO =threading .local ()#line:876
+  O00O0O0O0O00000OO =len (OO0OO0O0OO0OOO0O0 )#line:877
+  print ("number of urls = "+str (O00O0O0O0O00000OO ))#line:878
+  def OO0OO00O00000O0O0 ():#line:879
+      if not hasattr (O0OOOO0OO0O0000OO ,"session"):#line:880
+          O0OOOO0OO0O0000OO .session =requests .Session ()#line:881
+      return O0OOOO0OO0O0000OO .session #line:882
+  def OO0O00OO000000O00 (OOOO0OOO0OO0OO00O ):#line:883
+    try :#line:884
+      OOO0O0OO0OOOO0O00 =OO0OO00O00000O0O0 ()#line:885
+      O00OOO000O0000O00 =OOO0O0OO0OOOO0O00 .get (OOOO0OOO0OO0OO00O ,timeout =1 ,allow_redirects =False )#line:886
+      if str (O00OOO000O0000O00 .status_code )[0 ]=="3":#line:887
+        OO00O0OO000OOO000 =OOOO0OOO0OO0OO00O +" : "+str (O00OOO000O0000O00 .status_code )+" >> "+O00OOO000O0000O00 .headers ['location']#line:888
+        print (Style .BRIGHT +Fore .WHITE +(OOOO0OOO0OO0OO00O )+" : "+Fore .BLUE +str (O00OOO000O0000O00 .status_code )+Fore .GREEN +" >> "+Fore .YELLOW +(O00OOO000O0000O00 .headers ['location']))#line:889
+        O000O0OO0OO00O000 .write (OO00O0OO000OOO000 +"\n")#line:890
+      elif str (O00OOO000O0000O00 .status_code )[0 ]=="2":#line:891
+        OOOOOOO0O0OOOOOOO =OOOO0OOO0OO0OO00O +" : "+str (O00OOO000O0000O00 .status_code )#line:892
+        print (Style .BRIGHT +Fore .WHITE +(OOOO0OOO0OO0OO00O )+" : "+Fore .GREEN +str (O00OOO000O0000O00 .status_code ))#line:893
+        O000O0OO0OO00O000 .write (OOOOOOO0O0OOOOOOO +"\n")#line:894
+      else :#line:895
+        O0000OOO00OOO0O00 =OOOO0OOO0OO0OO00O +" : "+str (O00OOO000O0000O00 .status_code )#line:896
+        print (Style .BRIGHT +Fore .WHITE +(OOOO0OOO0OO0OO00O )+" : "+Fore .RED +str (O00OOO000O0000O00 .status_code ))#line:897
+        O000O0OO0OO00O000 .write (O0000OOO00OOO0O00 +"\n")#line:898
+    except :#line:899
+      print (Style .BRIGHT +Fore .WHITE +(OOOO0OOO0OO0OO00O )+" : "+Fore .RED +" : is unreachable")#line:900
+  def O000O0O0000O0OOOO (O0OOO0O0OO0OO0O00 ):#line:901
+    O0OOO0OO00O0000O0 ="http://"+O0OOO0O0OO0OO0O00 #line:902
+    OO0O00OO000000O00 (O0OOO0OO00O0000O0 )#line:903
+  if __name__ =="__main__":#line:905
+    O0OO00O0OO0O000OO =time .time ()#line:906
+    with concurrent .futures .ThreadPoolExecutor (max_workers =40 )as O0O00O000OO00OO00 :#line:907
+            O0O00O000OO00OO00 .map (O000O0O0000O0OOOO ,OO0OO0O0OO0OOO0O0 )#line:908
+    OOO0OO0OO0OO0OO00 =time .time ()-O0OO00O0OO0O000OO #line:909
+    print ("finished in : "+str (OOO0OO0OO0OO0OO00 )+"  sec")#line:910
+try :#line:929
+  if option =="0":#line:932
+    users ()#line:933
+  elif option =="1":#line:936
+    direct ()#line:937
+  elif option =="2":#line:940
+    hackertarget ()#line:941
+  elif option =="3":#line:944
+    delta ()#line:945
+  elif option =="4":#line:947
+    print ("coming soon")#line:948
+  elif option =="5":#line:950
+    android ()#line:951
+  else :#line:952
+    print (R +'try again wrong option')#line:953
+    time .sleep (2 )#line:954
+    print (C +"\r\nbay bay sir have good day\r\n -----------------\r")#line:955
+except KeyboardInterrupt :#line:956
+    print (C +"\r\nbay bay sir have good day\r\n -----------------\r")#line:957
+    time .sleep (2 )#line:958
+    os .system ('clear')#line:959
+txt ='SILENCE IS THE MOST POWERFUL SCREEM WHEN SECURITY FALLS WE RISE'#line:964
